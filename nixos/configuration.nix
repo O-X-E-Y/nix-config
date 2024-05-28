@@ -2,6 +2,7 @@
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
   inputs,
+  outputs,
   lib,
   config,
   pkgs,
@@ -23,6 +24,9 @@
   nixpkgs = {
     # You can add overlays here
     overlays = [
+      # outputs.overlays.additions
+      # outputs.overlays.modifications
+      # outputs.overlays.unstable-packages
       # If you want to use overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
 
@@ -33,12 +37,17 @@
       #   });
       # })
     ];
+
+
     # Configure your nixpkgs instance
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
     };
   };
+
+  # environment.extraOutputsToInstall = [ "dev" ];
+  # environment.variables.C_INCLUDE_PATH = "${nixpkgs.expat.dev}/include";
 
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
@@ -136,8 +145,10 @@
     mold
     rustup
     llvmPackages_17.clangUseLLVM
-    llvmPackages_17.clang-unwrapped
+    llvmPackages_17.clang
+    rocmPackages.llvm.clang-tools-extra
     llvmPackages_17.libllvm
+    llvmPackages_17.libunwind
     nix-index
     nestopia
     libinput
@@ -146,6 +157,7 @@
     freetype
     sass
     home-manager
+    gnumake42
   ];
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
@@ -165,6 +177,7 @@
       packages = with pkgs; [
         discord
         vscode
+        vscode-with-extensions
         spotify
       ];
     };
