@@ -43,6 +43,9 @@
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
+      permittedInsecurePackages = [
+        "electron-19.1.9"
+      ];
     };
   };
 
